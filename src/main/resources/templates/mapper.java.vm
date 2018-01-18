@@ -1,0 +1,34 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+import java.util.List;
+import java.util.Map;
+##import ${superMapperClassPackage};
+
+/**
+ * <p>
+ * $!{table.comment} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.mapperName} : ${superMapperClass}<${entity}>
+#else
+##public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
+public interface ${table.mapperName}{
+
+        int add(${entity} entity) ;
+
+        int update(${entity} entity) ;
+
+        int delete(int id);
+
+        Users selectById(Long id);
+
+        List<${entity}> selectAllByPage(Map map) ;
+
+        int selectAllBySize(Map map);
+}
+#end

@@ -1,0 +1,105 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import ${superServiceImplClassPackage};
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import ${cfg.dto}.ResultBean;
+import ${cfg.dto}.${entity}QueryBean;
+import ${cfg.dto}.${entity}DTO;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service("${table.serviceName}")
+#if(${kotlin})
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+
+}
+#else
+##public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+public class ${table.serviceImplName} implements ${table.serviceName} {
+
+    @Autowired
+    private ${table.mapperName} mapper;
+
+        @Override
+        public ResultBean insert(${entity}DTO dto) throws Exception {
+            ResultBean resultBean = new ResultBean();
+            ${entity} entity = new ${entity}();
+            BeanUtils.copyProperties(dto,entity);
+            int id = usersMapper.add(entity) ;
+            resultBean.setSucResult(id);
+            return resultBean;
+        }
+
+        @Override
+        public ResultBean update(${entity}DTO dto) throws Exception {
+            ResultBean resultBean = new ResultBean();
+            ${entity} entity = mapper.selectById(dto.getId());
+            if (entity != null) {
+                BeanUtils.copyProperties(dto,entity);
+                int id = usersMapper.update(entity) ;
+                resultBean.setSucResult(id);
+            }
+            return resultBean;
+        }
+
+        @Override
+        public ResultBean delete(int id) throws Exception {
+            ResultBean resultBean = new ResultBean();
+            ${entity} entity = mapper.selectById((long) id) ;
+            if (users != null) {
+                int result = usersMapper.delete(id) ;
+                resultBean.setSucResult(result);
+            }
+            return resultBean;
+        }
+
+        @Override
+        public ResultBean listByPage(${entity}QueryBean queryBean) throws Exception {
+            ResultBean resultBean = new ResultBean();
+            List<${entity}> entityList = new ArrayList<>();
+            int offset = PageBean.getOffset(queryBean.getPageNo(), queryBean.getPageSize());
+            HashMap map = new HashMap();
+            map.put("pageNo", offset);
+            map.put("pageSize", queryBean.getPageSize());
+    #foreach($field in ${table.fields})
+        #if(!${field.keyFlag})##生成普通字段
+            if (!StringUtils.isEmpty(queryBean.getName())) {
+                map.put("${field.propertyName}", new StringBuilder("%").append(queryBean.get${field.capitalName}).append("%").toString());
+            }
+        #end
+    #end
+            int total = 0;
+
+            entityList = mappper.selectAllByPage(map) ;
+            total = mappper.selectAllBySize(map);
+            PageBean pageBean = new PageBean();
+            pageBean.setList(usersList);
+            pageBean.setTotal(total);
+            pageBean.setPages(PageBean.getPages(total, queryBean.getPageSize()));
+            pageBean.setPageNo(queryBean.getPageNo());
+            pageBean.setPageSize(queryBean.getPageSize());
+            resultBean.setSucResult(pageBean);
+            return resultBean;
+        }
+
+        @Override
+        public ResultBean get(int id) throws Exception {
+            ResultBean resultBean = new ResultBean();
+            ${entity} entity = apper.selectById((long) id) ;
+            resultBean.setSucResult();
+            return resultBean;entity
+        }
+}
+#end

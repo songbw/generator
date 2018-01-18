@@ -1,0 +1,34 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+##import ${superServiceClassPackage};
+import ${cfg.dto}.ResultBean;
+import ${cfg.dto}.${entity}QueryBean;
+import ${cfg.dto}.${entity}DTO;
+
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ * ${cfg.abc}
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${kotlin})
+interface ${table.serviceName} : ${superServiceClass}<${entity}>
+#else
+##public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
+public interface ${table.serviceName} {
+
+        ResultBean insert(${entity}DTO dto) throws Exception;
+
+        ResultBean update(${entity}DTO dto) throws Exception;
+
+        ResultBean delete(int id) throws Exception;
+
+        ResultBean listByPage(${entity}QueryBean queryBean) throws Exception;
+
+        ResultBean get(int id) throws Exception;
+
+}
+#end
