@@ -57,7 +57,7 @@ public class GeneratorHelper {
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("root");
-        dsc.setUrl("jdbc:mysql://192.168.148.17:3306/fota?characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://192.168.148.17:3306/jiannei?characterEncoding=utf8");
         mpg.setDataSource(dsc);
 
         // 策略配置
@@ -89,8 +89,10 @@ public class GeneratorHelper {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("com.smartauto");
-        pc.setModuleName("fota");
+        pc.setParent("com.jiannei");
+        pc.setModuleName("duxin");
+        pc.setController("controller");
+        pc.setMapper("dao") ;
         mpg.setPackageInfo(pc);
 
         // 注入自定义配置，可以在 VM 中使用 cfg.abc 【可无】
@@ -98,28 +100,29 @@ public class GeneratorHelper {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put("dto", "com.smartauto.fota.dto");
+                map.put("dto", "com.jiannei.duxin.dto");
+                map.put("query", "com.jiannei.duxin.query");
                 this.setMap(map);
             }
         };
 
         // 自定义 xxList.jsp 生成
         List<FileOutConfig> focList = new ArrayList<FileOutConfig>();
-        focList.add(new FileOutConfig("/templates/entity.java.vm") {
+        focList.add(new FileOutConfig("/templates/entityDTO.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return "D://my_" + tableInfo.getEntityName() + ".java";
+                return "D://com/jiannei/duxin/dto/" + tableInfo.getEntityName() + "DTO.java";
             }
         });
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
 
         // 调整 xml 生成目录演示
-        focList.add(new FileOutConfig("/templates/service.java.vm") {
+        focList.add(new FileOutConfig("/templates/entityQueryBean.java.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return "/develop/code/xml/" + tableInfo.getEntityName() + ".xml";
+                return "D://com/jiannei/duxin/query/" + tableInfo.getEntityName() + "QueryBean.java";
             }
         });
         cfg.setFileOutConfigList(focList);

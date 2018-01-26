@@ -6,10 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ${package.Service}.${table.serviceName}
+import ${package.Service}.${table.serviceName};
 import ${cfg.dto}.ResultBean;
-import ${cfg.dto}.${entity}QueryBean;
+import ${cfg.query}.${entity}QueryBean;
 import ${cfg.dto}.${entity}DTO;
+import ${cfg.dto}.SystemStatus;
 
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
@@ -60,7 +61,7 @@ public class ${table.controllerName} {
             }
             ResultBean resultBean = new ResultBean();
             try {
-                resultBean = service.getListByPage(queryBean);
+                resultBean = service.listByPage(queryBean);
             } catch (Exception e) {
                 log.error(e.getMessage());
                 resultBean.setFailMsg(SystemStatus.SERVER_ERROR);

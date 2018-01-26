@@ -1,11 +1,12 @@
 package ${package.Entity};
 
+import java.io.Serializable;
+import java.util.Date;
+import java.math.BigDecimal;
 #if(${activeRecord})
 import java.io.Serializable;
+import java.util.Date;
 
-#end
-#foreach($pkg in ${table.importPackages})
-import ${pkg};
 #end
 #if(${entityLombokModel})
 
@@ -20,7 +21,6 @@ import lombok.experimental.Accessors;
  * <p>
  * $!{table.comment}
  * </p>
- *  ${cfg.abc}
  * @author ${author}
  * @since ${date}
  */
@@ -55,7 +55,7 @@ public class ${entity} implements Serializable {
 #if(${field.keyFlag})
 ## 主键
 #if(${field.keyIdentityFlag})
-    @TableId(value = "${field.name}", type = IdType.AUTO)
+##    @TableId(value = "${field.name}", type = IdType.AUTO)
 #elseif(!$null.isNull(${idType}) && "$!idType" != "")
     @TableId(value = "${field.name}", type = IdType.${idType})
 #elseif(${field.convert})
@@ -70,7 +70,7 @@ public class ${entity} implements Serializable {
     @TableField(fill = FieldFill.${field.fill})
 #end
 #elseif(${field.convert})
-    @TableField("${field.name}")
+##    @TableField("${field.name}")
 #end
 ## 乐观锁注解
 #if(${versionFieldName}==${field.name})

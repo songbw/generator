@@ -3,14 +3,18 @@ package ${package.ServiceImpl};
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
-import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import ${cfg.dto}.ResultBean;
-import ${cfg.dto}.${entity}QueryBean;
+import ${cfg.query}.${entity}QueryBean;
 import ${cfg.dto}.${entity}DTO;
 import java.util.List;
 import java.util.Map;
+import org.springframework.util.StringUtils;
+import com.jiannei.duxin.dto.PageBean;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -37,7 +41,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
             ResultBean resultBean = new ResultBean();
             ${entity} entity = new ${entity}();
             BeanUtils.copyProperties(dto,entity);
-            int id = usersMapper.add(entity) ;
+            int id = mapper.add(entity) ;
             resultBean.setSucResult(id);
             return resultBean;
         }
@@ -48,7 +52,7 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
             ${entity} entity = mapper.selectById(dto.getId());
             if (entity != null) {
                 BeanUtils.copyProperties(dto,entity);
-                int id = usersMapper.update(entity) ;
+                int id = mapper.update(entity) ;
                 resultBean.setSucResult(id);
             }
             return resultBean;
@@ -58,8 +62,8 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
         public ResultBean delete(int id) throws Exception {
             ResultBean resultBean = new ResultBean();
             ${entity} entity = mapper.selectById((long) id) ;
-            if (users != null) {
-                int result = usersMapper.delete(id) ;
+            if (entity != null) {
+                int result = mapper.delete(id) ;
                 resultBean.setSucResult(result);
             }
             return resultBean;
@@ -75,17 +79,17 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
             map.put("pageSize", queryBean.getPageSize());
     #foreach($field in ${table.fields})
         #if(!${field.keyFlag})##生成普通字段
-            if (!StringUtils.isEmpty(queryBean.getName())) {
-                map.put("${field.propertyName}", new StringBuilder("%").append(queryBean.get${field.capitalName}).append("%").toString());
+            if (!StringUtils.isEmpty(queryBean.get${field.capitalName}())) {
+                map.put("${field.propertyName}", new StringBuilder("%").append(queryBean.get${field.capitalName}()).append("%").toString());
             }
         #end
     #end
             int total = 0;
 
-            entityList = mappper.selectAllByPage(map) ;
-            total = mappper.selectAllBySize(map);
+            entityList = mapper.selectAllByPage(map) ;
+            total = mapper.selectAllBySize(map);
             PageBean pageBean = new PageBean();
-            pageBean.setList(usersList);
+            pageBean.setList(entityList);
             pageBean.setTotal(total);
             pageBean.setPages(PageBean.getPages(total, queryBean.getPageSize()));
             pageBean.setPageNo(queryBean.getPageNo());
@@ -97,9 +101,9 @@ public class ${table.serviceImplName} implements ${table.serviceName} {
         @Override
         public ResultBean get(int id) throws Exception {
             ResultBean resultBean = new ResultBean();
-            ${entity} entity = apper.selectById((long) id) ;
-            resultBean.setSucResult();
-            return resultBean;entity
+            ${entity} entity = mapper.selectById((long) id) ;
+            resultBean.setSucResult(entity);
+            return resultBean;
         }
 }
 #end

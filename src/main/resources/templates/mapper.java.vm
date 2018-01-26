@@ -25,7 +25,7 @@ public interface ${table.mapperName}{
 
         int delete(int id);
 
-        Users selectById(Long id);
+        ${entity} selectById(Long id);
 
         List<${entity}> selectAllByPage(Map map) ;
 

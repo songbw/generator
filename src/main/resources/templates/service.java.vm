@@ -1,16 +1,14 @@
 package ${package.Service};
 
-import ${package.Entity}.${entity};
 ##import ${superServiceClassPackage};
 import ${cfg.dto}.ResultBean;
-import ${cfg.dto}.${entity}QueryBean;
+import ${cfg.query}.${entity}QueryBean;
 import ${cfg.dto}.${entity}DTO;
 
 /**
  * <p>
  * $!{table.comment} 服务类
  * </p>
- * ${cfg.abc}
  * @author ${author}
  * @since ${date}
  */
