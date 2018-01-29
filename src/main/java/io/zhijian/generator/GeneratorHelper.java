@@ -26,7 +26,7 @@ public class GeneratorHelper {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         gc.setOutputDir("D://");
-        gc.setFileOverride(false);
+        gc.setFileOverride(true);
         gc.setActiveRecord(false);// 不需要ActiveRecord特性的请改为false
         gc.setEnableCache(false);// XML 二级缓存
         gc.setBaseResultMap(true);// XML ResultMap

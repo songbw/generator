@@ -29,8 +29,7 @@
         insert into ${table.name}(
         #foreach($field in ${table.fields})
             #if(!${field.keyFlag})##生成普通字段
-                ${field.name}
-                #if($foreach.hasNext)
+                ${field.name} #if($foreach.hasNext)
                   ,
                 #end
             #end
@@ -38,9 +37,13 @@
             ) values(
         #foreach($field in ${table.fields})
             #if(!${field.keyFlag})##生成普通字段
-                #{${field.propertyName}}
+                #if(${field.propertyName} != "createdAt" && ${field.propertyName} != "updatedAt")
+                 #{${field.propertyName}}
+                #else
+                 now()
+                #end
                 #if($foreach.hasNext)
-                   ,
+                 ,
                 #end
             #end
         #end
