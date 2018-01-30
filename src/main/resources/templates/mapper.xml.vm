@@ -52,11 +52,16 @@
     <update id="update" parameterType="${package.Entity}.${entity}" keyProperty="id">
         update ${table.name} set
         #foreach($field in ${table.fields})
-            #if(!${field.keyFlag})##生成普通字段
-                ${field.name} = #{${field.propertyName}}
-                    #if($foreach.hasNext)
-                       ,
+            #if(${field.name} != "created_at")
+                #if(!${field.keyFlag})##生成普通字段
+                    #if(${field.name} != "updated_at")
+                        <if test="${field.propertyName} != null and ${field.propertyName} != '' ">
+                            ${field.name} = #{${field.propertyName}}#if($foreach.hasNext) ,#end
+                        </if>
+                    #else
+                      ${field.name} = now()#if($foreach.hasNext) ,#end
                     #end
+                #end
             #end
         #end
           where id = #{id}
@@ -71,7 +76,6 @@
         select * from ${table.name} where 1=1
         #foreach($field in ${table.fields})
             #if(!${field.keyFlag})##生成普通字段
-                ${field.name} = #{${field.propertyName}}
                 <if test="${field.propertyName} != null and ${field.propertyName} != '' ">
                     AND ${field.name} LIKE #{${field.propertyName}}
                 </if>
@@ -83,7 +87,6 @@
         select count(id) from ${table.name} where 1=1
         #foreach($field in ${table.fields})
             #if(!${field.keyFlag})##生成普通字段
-                ${field.name} = #{${field.propertyName}}
                 <if test="${field.propertyName} != null and ${field.propertyName} != '' ">
                     AND ${field.name} LIKE #{${field.propertyName}}
                 </if>
